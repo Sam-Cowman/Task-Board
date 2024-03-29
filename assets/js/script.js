@@ -15,11 +15,28 @@ function createTaskCard(task) {
     // use jquery to create a div and add class card 
     // what should be on the card, h tag for, create the html elements here 
     // append smaller elements to the card
-    const taskCard = $('<h2>');
-    taskCardEl.addClass('card'); 
-    $('#taskName') = $('<h3>')
-    $('#taskDescrption') = $('<p>')
-    
+    const taskCard = $('<div>')
+    .addClass('card task-card draggable my-3')
+    .attr('data-task-id', task.id);
+    const cardHeader = $('<div>').addClass('card-header h4').text(task.name);
+    const cardBody = $('<div>').addClass('card-body');
+    const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
+    const cardDescription = $('<p>').addClass('card-descr').text(task.description);
+    const cardDeleteBtn = $('<button>')
+    .addClass('btn btn-danger delete')
+    .text('Delete')
+    .attr('data-task-id', task.id);
+  cardDeleteBtn.on('click', handleDeleteProject);
+
+  if (now.isSame(taskDueDate, 'day')) {
+    taskCard.addClass('bg-warning text-white');
+  } else if (now.isAfter(taskDueDate)) {
+    taskCard.addClass('bg-danger text-white');
+    cardDeleteBtn.addClass('border-light');
+  }
+cardBody.append(cardDueDate, cardDescription, cardDeleteBtn);
+taskCard.append(cardHeader, cardBody);
+
 return taskCard;
 }
 
@@ -30,6 +47,15 @@ function renderTaskList() {
     // empty all the divs with jquery 
     // empty the cards before adding cards 
 
+for (let task of taskList) {
+    if (task.status === 'to-do') {
+      todoList.append(createProjectCard(project));
+    } else if (task.status === 'in-progress') {
+      inProgressList.append(createProjectCard(project));
+    } else if (task.status === 'done') {
+      doneList.append(createProjectCard(project));
+    }
+  }
     $("#draggable").draggable(taskFormEl);
 
 }
