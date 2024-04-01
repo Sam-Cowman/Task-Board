@@ -16,7 +16,7 @@ function createTaskCard(task) {
   // append smaller elements to the card
   const taskCard = $("<div>")
     .addClass("card task-card draggable my-3")
-    .attr("data-task-id", task.id);
+    .attr("data-taskid", task.id);
   const cardHeader = $("<div>").addClass("card-header h4").text(task.name);
   const cardBody = $("<div>").addClass("card-body");
   const cardDueDate = $("<p>").addClass("card-text").text(task.date);
@@ -26,7 +26,7 @@ function createTaskCard(task) {
   const cardDeleteBtn = $("<button>")
     .addClass("btn btn-danger delete")
     .text("Delete")
-    .attr("data-task-id", task.id);
+    .attr("data-taskid", task.id);
   cardDeleteBtn.on("click", handleDeleteTask);
     const now = dayjs()
   if (now.isSame(task.date, "day")) {
@@ -49,9 +49,8 @@ function renderTaskList() {
   // get tasks from local storage
   // empty all the divs with jquery
   // empty the cards before adding cards
- if (!taskList) {
-taskList = []
- }
+  let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+
 
 //   const tasks = readTasksFromStorage();
 
@@ -76,7 +75,7 @@ taskList = []
   $(".draggable").draggable({
     opacity: 0.7,
     zIndex: 100,
-    // ? This is the function that creates the clone of the card that is dragged. This is purely visual and does not affect the data.
+    // This function creates the clone of the card that is dragged. This is purely visual and does not affect the data.
     helper: function (e) {
       // ? Check if the target of the drag event is the card itself or a child element. If it is the card itself, clone it, otherwise find the parent card  that is draggable and clone that.
       const original = $(e.target).hasClass("ui-draggable")
@@ -119,7 +118,7 @@ function handleAddTask(event) {
 function handleDeleteTask(event) {
     event.preventDefault();
     console.log($(this))
-    const taskId = $(this).attr('data-task-id')
+    const taskId = $(this).attr('data-taskid')
     console.log(taskId)
 taskList = taskList.filter(task => task.id != taskId)
 console.log(taskList)
@@ -129,13 +128,36 @@ renderTaskList()
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-    console.log(ui)
-  $("#draggable").draggable();
-  $("#droppable").droppable({
-    drop: function (event, ui) {
-      $(task).addClass("ui-state-highlight");
-    },
-  });
+  
+  // $("#draggable").draggable();
+  // $(".lane").droppable({
+  //   drop: function (event, ui) {
+     const taskId = ui.draggable[0].dataset.taskid
+     console.log(event.target.id)
+     console.log(taskId)
+  //   },
+  // });
+
+  // const taskId = ui.draggable.attr('data-task-id');
+  
+  // Get the id of the lane that the card was dropped into
+  const newStatus = event.target.id;
+  const taskList = localStorage.getItem
+  // Update the status of the dropped task
+  for (let task of taskList) {
+    if (task.id === taskId) {
+      task.status = newStatus;
+      console.log(typeof task.id)
+      console.log(taskid)
+    }
+  }
+  
+  // Save the updated task list to localStorage
+  localStorage.setItem('tasks', JSON.stringify(taskList));
+  
+  // Re-render the task list to reflect the changes
+  renderTaskList();
+
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
