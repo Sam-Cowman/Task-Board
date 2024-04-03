@@ -29,9 +29,9 @@ function createTaskCard(task) {
     .attr("data-taskid", task.id);
   cardDeleteBtn.on("click", handleDeleteTask);
     const now = dayjs()
-  if (now.isSame(task.date, "day")) {
+  if (now.isSame(task.date, "day") && task.status !== 'done') {
     taskCard.addClass("bg-warning text-white");
-  } else if (now.isAfter(task.date)) {
+  } else if (now.isAfter(task.date) && task.status !== 'done') {
     taskCard.addClass("bg-danger text-white");
     cardDeleteBtn.addClass("border-light");
   }
@@ -112,6 +112,7 @@ function handleAddTask(event) {
   $('#taskDescription').val('');
 
   renderTaskList()
+  $('#taskModal').modal('hide')
 }
 
 // Todo: create a function to handle deleting a task
@@ -141,14 +142,15 @@ function handleDrop(event, ui) {
   // const taskId = ui.draggable.attr('data-task-id');
   
   // Get the id of the lane that the card was dropped into
-  const newStatus = event.target.id;
-  const taskList = localStorage.getItem
+  const newStatus = event.target.id.slice(0, -6);
+  console.log('newStatus', newStatus);
+  const taskList = JSON.parse(localStorage.getItem('tasks'))
   // Update the status of the dropped task
   for (let task of taskList) {
-    if (task.id === taskId) {
+    if (task.id == taskId) {
       task.status = newStatus;
       console.log(typeof task.id)
-      console.log(taskid)
+      console.log(taskId)
     }
   }
   
