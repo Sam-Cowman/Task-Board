@@ -23,7 +23,7 @@ body {
 }
 
 .modal-header {
-  background-color: #f8f9fa; /* Choose your preferred color */
+  background-color: #f8f9fa; 
 }
 
 .modal-body {
@@ -31,7 +31,7 @@ body {
 }
 
 .modal-content {
-    width: 400px; /* Adjust width as needed */
+    width: 400px; 
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
@@ -40,8 +40,8 @@ body {
 }
 
 .btn-close {
-  color: #000; /* Change close button color */
-  opacity: 1; /* Ensure the close button is fully visible */
+  color: #000; 
+  opacity: 1; 
 }
 
 input[type="text"], textarea {
@@ -54,11 +54,13 @@ input[type="text"], textarea {
 }
 
 #add-btn {
-  background-color: #007bff; /* Choose your preferred color */
-  color: #fff; /* Text color */
+  background-color: #008000; 
+  color: #fff; 
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   cursor: pointer;
+  display: block;  
+  margin: 0 auto;  
 }
 
