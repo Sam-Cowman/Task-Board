@@ -13,26 +13,17 @@ function createTaskCard(task) {
   const taskCard = $("<div>")
     .addClass("card task-card draggable my-3") // Classes for styling and draggable functionality
     .attr("data-taskid", task.id); // Custom data attribute to store task ID
-
-  // Create a <div> element for the card header, assign class and set text content to task name
   const cardHeader = $("<div>").addClass("card-header h4").text(task.name);
-
-  // Create a <div> element for the card body
   const cardBody = $("<div>").addClass("card-body");
-
-  // Create a <p> element for the task due date, assign class and set text content
   const cardDueDate = $("<p>").addClass("card-text").text(task.date);
-
-  // Create a <p> element for the task description, assign class and set text content
   const cardDescription = $("<p>").addClass("card-descr").text(task.description);
 
   // Create a <button> element for the delete button, assign classes, text content, and task ID data attribute
   const cardDeleteBtn = $("<button>")
-    .addClass("btn btn-danger delete") // Classes for Bootstrap styling
-    .text("Delete") // Text content of the button
-    .attr("data-taskid", task.id); // Custom data attribute to store task ID
+    .addClass("btn btn-danger delete") 
+    .text("Delete") 
+    .attr("data-taskid", task.id); 
 
-  // Add click event listener to the delete button to handle task deletion
   cardDeleteBtn.on("click", handleDeleteTask);
 
   // Check if task is overdue or due today and apply appropriate styling
@@ -50,7 +41,6 @@ function createTaskCard(task) {
   // Append card header and body to the task card
   taskCard.append(cardHeader, cardBody);
 
-  // Return the task card element
   return taskCard;
 }
 
@@ -82,7 +72,7 @@ function renderTaskList() {
       const original = $(e.target).hasClass("ui-draggable")
         ? $(e.target)
         : $(e.target).closest(".ui-draggable");
-      // ? Return the clone with the width set to the width of the original card. This is so the clone does not take up the entire width of the lane. This is to also fix a visual bug where the card shrinks as it's dragged to the right.
+      // ? Return the clone with the width set to the width of the original card.  
       return original.clone().css({
         width: original.outerWidth(),
       });
@@ -108,51 +98,57 @@ function handleAddTask(event) {
   // Clear input fields after adding task
   $('#taskName, #taskduedate, #taskDescription').val('');
 
-  // Re-render task list
   renderTaskList();
 
-  // Hide modal
   $('#taskModal').modal('hide');
 }
 
-// Todo: create a function to handle deleting a task
+// Todo: Create a function to handle deleting a task 
 function handleDeleteTask(event) {
   event.preventDefault();
 
   const taskId = $(this).data('taskid');
 
+  // Filter the taskList to remove the task with the matching ID
   taskList = taskList.filter(task => task.id !== taskId);
+
+  // Update local storage with the modified task list
   localStorage.setItem("tasks", JSON.stringify(taskList));
 
   renderTaskList();
 }
 
-// Todo: create a function to handle dropping a task into a new status lane
+// Todo: Create a function to handle dropping a task into a new status lane 
 function handleDrop(event, ui) {
   const taskId = ui.draggable.data('taskid');
+
   const newStatus = event.target.id.slice(0, -6);
 
+  // Loop through the task list and update the status of the matching task
   taskList.forEach(task => {
     if (task.id === taskId) {
       task.status = newStatus;
     }
   });
 
+  // Update local storage with the modified task list
   localStorage.setItem('tasks', JSON.stringify(taskList));
+
   renderTaskList();
 }
 
-// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// Code to be executed when the page loads 
 $(document).ready(function () {
   taskFormEl.on("submit", handleAddTask);
+
   $("#taskduedate").datepicker();
 
+  // Make the lanes droppable for task movement
   $('.lane').droppable({
-    accept: '.draggable',
-    drop: handleDrop,
+    accept: '.draggable', // Only accept draggable elements
+    drop: handleDrop,     // Call handleDrop function on drop event
   });
 
   renderTaskList();
 });
-
 
