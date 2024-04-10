@@ -54,13 +54,13 @@ input[type="text"], textarea {
 }
 
 #add-btn {
-  background-color: #008000; 
+  background-color: #008000 !important; 
   color: #fff; 
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   cursor: pointer;
-  display: block;  
-  margin: 0 auto;  
+  display: block !important;  
+  margin: 0 auto !important;  
 }
 
